@@ -7,11 +7,27 @@ from math import gcd
 from typing import List, Any
 
 def swap(arr: List[Any], i: int, j: int) -> None:
-    """In-place swap. Swaps[1]."""
+    """In-place swap.
+
+    Swaps[1].
+    Reads[2].
+    Writes[2].
+    """
     arr[i], arr[j] = arr[j], arr[i]
 
 def shift_cycle(arr: List[Any], k: int) -> None:
-    """In-place shift. Swaps[n-gcd(n,k)]."""
+    """In-place shift.
+
+    Reads[n].
+    Writes[n].
+
+    Swap version:
+        while i != j:
+            i_next = (i + k) % n
+            swap(arr, i, i_next)
+            i = i_next
+    Swaps[n-gcd(n,k)].
+    """
     n = len(arr)
     k = (-k % n + n) % n
     if n == 0 or k == 0:
@@ -19,10 +35,12 @@ def shift_cycle(arr: List[Any], k: int) -> None:
     m = gcd(n, k)
     for j in range(m):
         i = (j + k) % n
+        temp = arr[i]
         while i != j:
             i_next = (i + k) % n
-            swap(arr, i, i_next)
+            arr[i] = arr[i_next]
             i = i_next
+        arr[j] = temp
 
 def shift_simple(arr: List[Any], k: int) -> List[Any]:
     n = len(arr)
@@ -30,7 +48,12 @@ def shift_simple(arr: List[Any], k: int) -> List[Any]:
     return arr[k:] + arr[:k]
 
 def _reverse(arr: List[Any], i: int, j: int) -> None:
-    """In-place reverse. Swaps[(j-i)/2]."""
+    """In-place reverse.
+
+    Swaps[(j-i+1)/2].
+    Reads[j-i+1].
+    Writes[j-i+1].
+    """
     while i < j:
         swap(arr, i, j)
         i += 1
@@ -39,7 +62,9 @@ def _reverse(arr: List[Any], i: int, j: int) -> None:
 def shift_reverse(arr: List[Any], k: int) -> None:
     """In-place shift.
 
-    Swaps[(n-1)/2+(k-1)/2+(n-k-1)/2] <= Swaps[n-1/2].
+    Swaps[n/2+k/2+(n-k)/2] <= Swaps[n].
+    Reads[2n].
+    Writes[2n].
     """
     n = len(arr)
     k = (k % n + n) % n
