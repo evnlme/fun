@@ -1,3 +1,8 @@
+"""
+Consideration: Finetuning memory access patterns may speed things up by avoiding cache
+misses. Though, you probably want to run a perf test first to see if the optimizations
+are necessary.
+"""
 from math import gcd
 from typing import List, Any
 
