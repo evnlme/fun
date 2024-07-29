@@ -52,8 +52,6 @@ def createComps(funcs: AutoCompInput) -> AutoCompOutput:
                 compMap[(src, dst)] = compose(f, g)
 
     def _comp(v: Any, src: str, dst: str) -> Any:
-        if src == dst:
-            return v
         if (src, dst) in compMap:
             return compMap[(src, dst)](v)
         else:
