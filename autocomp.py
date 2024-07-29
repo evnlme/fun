@@ -9,16 +9,17 @@ from functools import reduce
 from itertools import product
 from typing import Any, List, Callable, Tuple, Dict
 
-AutoCompInput = List[Tuple[Callable[[Any], Any], str, str]]
+Unary = Callable[[Any], Any]
+AutoCompInput = List[Tuple[Unary, str, str]]
 AutoCompOutput = Callable[[Any, str, str], Any]
 
-def compose(*funcs: Callable[[Any], Any]) -> Callable[[Any], Any]:
+def compose(*funcs: Unary) -> Unary:
     return reduce(lambda f, g: lambda x: g(f(x)), funcs)
 
 def createComps(funcs: AutoCompInput) -> AutoCompOutput:
     vertIdMap: Dict[str, int] = dict()
     vertList: List[str] = list()
-    compMap: Dict[Tuple[str, str], Callable[[Any], Any]] = dict()
+    compMap: Dict[Tuple[str, str], Unary] = dict()
     for _, src, dst in funcs:
         if src not in vertIdMap:
             vertIdMap[src] = len(vertIdMap)
